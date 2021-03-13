@@ -172,6 +172,11 @@ void gpio_init(void)
     GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
     HAL_GPIO_Init(POWER_EN_PIN_PORT, &GPIO_InitStructure);
 
+    GPIO_InitStructure.Pin = nRESET_IN_NO_FWRD_PIN;
+    GPIO_InitStructure.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStructure.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(nRESET_IN_NO_FWRD_PIN_PORT, &GPIO_InitStructure);
+
     // Setup the 8MHz MCO
     GPIO_InitStructure.Pin = GPIO_PIN_8;
     GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -208,7 +213,7 @@ void gpio_set_msc_led(gpio_led_state_t state)
 
 uint8_t gpio_get_reset_btn_no_fwrd(void)
 {
-    return (nRESET_PIN_PORT->IDR & nRESET_PIN) ? 0 : 1;
+    return HAL_GPIO_ReadPin(nRESET_IN_NO_FWRD_PIN_PORT, nRESET_IN_NO_FWRD_PIN);
 }
 
 uint8_t gpio_get_reset_btn_fwrd(void)
